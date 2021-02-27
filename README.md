@@ -9,6 +9,15 @@ We use the framework Gin in order to move it forward faster.
 - Create a new handler and defined in the handler folder
 
 
+## Project structure
+
+- cmd/api: Entrypoints for our service
+- internal/platform: Infrastructure references 
+- internal/platform/server: References to our server (gin in this case)
+- internal/platform/storage: 
+- internal/platform/storage/mysql/: Mysql implementation
+- internal/platform/storage/storagemocks: 
+
 
 ## Mocks
 
