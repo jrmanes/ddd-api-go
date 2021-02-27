@@ -1,6 +1,13 @@
 package mooc
 
+import "context"
 
+// CourseRepository defines the expected behavior from a course storage
+type CourseRepository interface {
+	Save(ctx context.Context, course Course) error
+}
+
+// Course is the data structure that represents a course.
 type Course struct {
 	id       string
 	name     string

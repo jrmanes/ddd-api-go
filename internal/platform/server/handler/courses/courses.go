@@ -14,7 +14,7 @@ type createRequest struct {
 }
 
 // CreateHandler returns and HTTP handler for courses creation
-func CreateHandler() gin.HandlerFunc  {
+func CreateHandler(courseRepository mooc.CourseRepository) gin.HandlerFunc  {
 	return func(ctx *gin.Context) {
 		var req createRequest
 		if err := ctx.BindJSON(&req); err != nil {
@@ -22,8 +22,10 @@ func CreateHandler() gin.HandlerFunc  {
 			return
 		}
 
+
 		course := mooc.NewCourse(req.ID, req.Name, req.Duration)
-		if err := Save (ctx, course); err != nil {
+
+		if err := courseRepository.Save (ctx, course); err != nil {
 			ctx.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
