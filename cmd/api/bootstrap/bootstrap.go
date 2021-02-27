@@ -12,11 +12,11 @@ const (
 	host = "localhost"
 	port = 8080
 
-	dbUser = "ddd-api-go"
-	dbPass = "ddd-api-go"
+	dbUser = "api-go"
+	dbPass = "api-go"
 	dbHost = "localhost"
 	dbPort = "3306"
-	dbName = "ddd-api-go"
+	dbName = "api-go"
 )
 
 // Run initialize the server, if st goes wrong, return an error to main
