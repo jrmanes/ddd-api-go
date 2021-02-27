@@ -28,7 +28,6 @@ func New(host string, port uint, courseRepository mooc.CourseRepository) Server 
 	}
 
 	srv.registerRoutes()
-
 	return srv
 }
 
