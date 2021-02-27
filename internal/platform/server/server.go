@@ -33,4 +33,5 @@ func (s *Server) Run() error  {
 // registerRoutes is the place that we defined all the routes
 func (s *Server) registerRoutes()  {
 	s.engine.GET("/health", health.CheckHandler())
+	s.engine.POST("/courses", courses.CreateHandler())
 }
