@@ -7,6 +7,8 @@ type CourseRepository interface {
 	Save(ctx context.Context, course Course) error
 }
 
+//go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=CourseRepository
+
 // Course is the data structure that represents a course.
 type Course struct {
 	id       string

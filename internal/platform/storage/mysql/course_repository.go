@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	mooc "github.com/jrmanes/ddd-api-go/internal"
 	"github.com/huandu/go-sqlbuilder"
+	mooc "github.com/jrmanes/ddd-api-go/internal"
 )
 
 // CourseRepository is a MySQL mooc.CourseRepository implementation.
