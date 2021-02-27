@@ -6,6 +6,7 @@ import (
 
 	"github.com/jrmanes/ddd-api-go/internal/platform/server"
 	"github.com/jrmanes/ddd-api-go/internal/platform/storage/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
