@@ -26,9 +26,9 @@ func TestHandler_Create(t *testing.T) {
 
 	// create the test cases
 	t.Run("given an invalid request it returns 400", func(t *testing.T) {
-		createCourseReq :=  createRequest{
-			ID:       "c01d7cf6-ec3f-47f0-9556-a5d6e9009a43",
-			Name:     "Test",
+		createCourseReq := createRequest{
+			ID:   "c01d7cf6-ec3f-47f0-9556-a5d6e9009a43",
+			Name: "Test",
 		}
 
 		b, err := json.Marshal(createCourseReq)
@@ -51,7 +51,7 @@ func TestHandler_Create(t *testing.T) {
 	})
 
 	t.Run("given a valid request it returns 201", func(t *testing.T) {
-		createCourseReq :=  createRequest{
+		createCourseReq := createRequest{
 			ID:       "c01d7cf6-ec3f-47f0-9556-a5d6e9009a43",
 			Name:     "Test",
 			Duration: "1 month",
