@@ -1,6 +1,41 @@
 package mooc
 
-import "context"
+import (
+	"context"
+	"errors"
+	"fmt"
+
+	"github.com/google/uuid"
+)
+
+var ErrInvalidCourseID = errors.New("invalid Course ID")
+
+// CourseID represents the course unique identifier
+type CourseID struct {
+	value string
+}
+
+// CourseName represents the course unique identifier
+type CourseName struct {
+	value string
+}
+
+// CourseDuration represents the course unique identifier
+type CourseDuration struct {
+	value string
+}
+
+// NewCourseID instantiate the VO for CourseID
+func NewCourseID(value string) (CourseID, error) {
+	v, err := uuid.Parse(value)
+	if err != nil {
+		return CourseID{}, fmt.Errorf("%w: %s", ErrInvalidCourseID, value)
+	}
+
+	return CourseID{
+		value: v.String(),
+	},nil
+}
 
 // CourseRepository defines the expected behavior from a course storage
 type CourseRepository interface {
@@ -11,9 +46,9 @@ type CourseRepository interface {
 
 // Course is the data structure that represents a course.
 type Course struct {
-	id       string
-	name     string
-	duration string
+	id       CourseID
+	name     CourseName
+	duration CourseDuration
 }
 
 // NewCourse creates a new course
