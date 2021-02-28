@@ -5,26 +5,26 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jrmanes/ddd-api-go/internal/creating"
 	"github.com/jrmanes/ddd-api-go/internal/platform/server/handler/courses"
 	"github.com/jrmanes/ddd-api-go/internal/platform/server/handler/health"
+	"github.com/jrmanes/ddd-api-go/kit/command"
 )
 
 type Server struct {
 	httpAddr string
-	engine *gin.Engine
+	engine   *gin.Engine
 
 	// dependencies
-	creatingCourseService creating.CourseService
+	commandBus command.Bus
 }
 
 // New initialization server Gin
-func New(host string, port uint, creatingCourseService creating.CourseService) Server {
+func New(host string, port uint, commandBus command.Bus) Server {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
-		creatingCourseService: creatingCourseService,
+		commandBus: commandBus,
 	}
 
 	srv.registerRoutes()
@@ -38,5 +38,5 @@ func (s *Server) Run() error {
 
 func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
-	s.engine.POST("/courses", courses.CreateHandler(s.creatingCourseService))
+	s.engine.POST("/courses", courses.CreateHandler(s.commandBus))
 }

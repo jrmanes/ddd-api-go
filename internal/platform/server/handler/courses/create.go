@@ -7,16 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 	mooc "github.com/jrmanes/ddd-api-go/internal"
 	"github.com/jrmanes/ddd-api-go/internal/creating"
+	"github.com/jrmanes/ddd-api-go/kit/command"
 )
 
 type createRequest struct {
-	ID string `json:"id" binding:"required"`
-	Name string `json:"name" binding:"required"`
+	ID       string `json:"id" binding:"required"`
+	Name     string `json:"name" binding:"required"`
 	Duration string `json:"duration" binding:"required"`
 }
 
-// CreateHandler returns and HTTP handler for courses creation
-func CreateHandler(creatingCourseService creating.CourseService) gin.HandlerFunc {
+// CreateHandler returns and HTTP handler for courses creation (controller)
+func CreateHandler(commandBus command.Bus) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req createRequest
 		if err := ctx.BindJSON(&req); err != nil {
@@ -24,7 +25,11 @@ func CreateHandler(creatingCourseService creating.CourseService) gin.HandlerFunc
 			return
 		}
 
-		err := creatingCourseService.CreateCourse(ctx, req.ID, req.Name, req.Duration)
+		err := commandBus.Dispatch(ctx, creating.NewCourseCommand(
+			req.ID,
+			req.Name,
+			req.Duration,
+		))
 
 		if err != nil {
 			switch {
