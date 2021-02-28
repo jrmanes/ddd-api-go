@@ -49,5 +49,3 @@ func Test_CourseService_CreateCourse_Succeed(t *testing.T) {
 	courseRepositoryMock.AssertExpectations(t)
 	assert.NoError(t, err)
 }
-
-
