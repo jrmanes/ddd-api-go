@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	mooc "github.com/jrmanes/ddd-api-go/internal"
+	"github.com/jrmanes/ddd-api-go/internal/creating"
 	"github.com/jrmanes/ddd-api-go/internal/platform/server/handler/courses"
 	"github.com/jrmanes/ddd-api-go/internal/platform/server/handler/health"
 )
@@ -15,29 +15,28 @@ type Server struct {
 	engine *gin.Engine
 
 	// dependencies
-	courseRepository mooc.CourseRepository
+	creatingCourseService creating.CourseService
 }
 
 // New initialization server Gin
-func New(host string, port uint, courseRepository mooc.CourseRepository) Server {
+func New(host string, port uint, creatingCourseService creating.CourseService) Server {
 	srv := Server{
-		httpAddr: fmt.Sprintf(host,port),
-		engine: gin.New(),
+		engine:   gin.New(),
+		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
-		courseRepository: courseRepository,
+		creatingCourseService: creatingCourseService,
 	}
 
 	srv.registerRoutes()
 	return srv
 }
 
-func (s *Server) Run() error  {
+func (s *Server) Run() error {
 	log.Println("Server running on", s.httpAddr)
 	return s.engine.Run(s.httpAddr)
 }
 
-// registerRoutes is the place that we defined all the routes
-func (s *Server) registerRoutes()  {
+func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
-	s.engine.POST("/courses", courses.CreateHandler(s.courseRepository))
+	s.engine.POST("/courses", courses.CreateHandler(s.creatingCourseService))
 }
