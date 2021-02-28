@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	mooc "github.com/jrmanes/ddd-api-go/internal"
@@ -11,8 +12,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCourseRepository_Save_RepositoryError(t *testing.T) {
-	courseID, courseName, courseDuration := "c01d7cf6-ec3f-47f0-9556-a5d6e9009a43", "Test Course", "1 month"
+func Test_CourseRepository_Save_RepositoryError(t *testing.T) {
+	courseID, courseName, courseDuration := "37a0f027-15e6-47cc-a5d2-64183281087e", "Test Course", "10 months"
 	course, err := mooc.NewCourse(courseID, courseName, courseDuration)
 	require.NoError(t, err)
 
@@ -24,7 +25,7 @@ func TestCourseRepository_Save_RepositoryError(t *testing.T) {
 		WithArgs(courseID, courseName, courseDuration).
 		WillReturnError(errors.New("something-failed"))
 
-	repo := NewCourseRepository(db)
+	repo := NewCourseRepository(db, 1*time.Millisecond)
 
 	err = repo.Save(context.Background(), course)
 
@@ -33,7 +34,8 @@ func TestCourseRepository_Save_RepositoryError(t *testing.T) {
 }
 
 func Test_CourseRepository_Save_Succeed(t *testing.T) {
-	courseID, courseName, courseDuration := "c01d7cf6-ec3f-47f0-9556-a5d6e9009a43", "Test Course", "1 month"
+	courseID, courseName, courseDuration := "37a0f027-15e6-47cc-a5d2-64183281087e", "Test Course", "10 months"
+
 	course, err := mooc.NewCourse(courseID, courseName, courseDuration)
 	require.NoError(t, err)
 
@@ -45,7 +47,7 @@ func Test_CourseRepository_Save_Succeed(t *testing.T) {
 		WithArgs(courseID, courseName, courseDuration).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
-	repo := NewCourseRepository(db)
+	repo := NewCourseRepository(db, 1*time.Millisecond)
 
 	err = repo.Save(context.Background(), course)
 

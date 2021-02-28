@@ -2,7 +2,6 @@ package inmemory
 
 import (
 	"context"
-	"log"
 
 	"github.com/jrmanes/ddd-api-go/kit/command"
 )
@@ -26,15 +25,7 @@ func (b *CommandBus) Dispatch(ctx context.Context, cmd command.Command) error {
 		return nil
 	}
 
-	go func() {
-		err := handler.Handle(ctx, cmd)
-		if err != nil {
-			log.Printf("Error while handling %s - %s\n", cmd.Type(), err)
-		}
-
-	}()
-
-	return nil
+	return handler.Handle(ctx, cmd)
 }
 
 // Register implements the command.Bus interface.

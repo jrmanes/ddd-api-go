@@ -6,12 +6,12 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/jrmanes/ddd-api-go/kit/event"
 )
 
-// Sentinel error, public error created by us
 var ErrInvalidCourseID = errors.New("invalid Course ID")
 
-// CourseID represents the course unique identifier
+// CourseID represents the course unique identifier.
 type CourseID struct {
 	value string
 }
@@ -83,6 +83,8 @@ type Course struct {
 	id       CourseID
 	name     CourseName
 	duration CourseDuration
+
+	events []event.Event
 }
 
 // CourseRepository defines the expected behaviour from a course storage.
@@ -109,11 +111,13 @@ func NewCourse(id, name, duration string) (Course, error) {
 		return Course{}, err
 	}
 
-	return Course{
+	course := Course{
 		id:       idVO,
 		name:     nameVO,
 		duration: durationVO,
-	}, nil
+	}
+	course.Record(NewCourseCreatedEvent(idVO.String(), nameVO.String(), durationVO.String()))
+	return course, nil
 }
 
 // ID returns the course unique identifier.
@@ -129,4 +133,17 @@ func (c Course) Name() CourseName {
 // Duration returns the course duration.
 func (c Course) Duration() CourseDuration {
 	return c.duration
+}
+
+// Record records a new domain event.
+func (c *Course) Record(evt event.Event) {
+	c.events = append(c.events, evt)
+}
+
+// PullEvents returns all the recorded domain events.
+func (c Course) PullEvents() []event.Event {
+	evt := c.events
+	c.events = []event.Event{}
+
+	return evt
 }
